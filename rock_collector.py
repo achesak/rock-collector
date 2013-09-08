@@ -4,6 +4,57 @@ from gi.repository import Gtk
 
 TITLE = "Rock Collector"
 
+MENU_DATA = """
+<ui>
+  <menubar name="menubar">
+    <menu action="collection_menu">
+      <menuitem action="add_rock" />
+      <menuitem action="add_mineral" />
+      <menuitem action="add_fossil" />
+      <separator />
+      <menuitem action="remove" />
+      <separator />
+      <menuitem action="clear_rocks" />
+      <menuitem action="clear_minerals" />
+      <menuitem action="clear_fossils" />
+      <menuitem action="clear_all" />
+      <separator />
+      <menu action="export_menu">
+        <menuitem action="export_rocks" />
+        <menuitem action="export_minerals" />
+        <menuitem action="export_fossils" />
+      </menu>
+      <menu action="import_menu">
+        <menuitem action="import_rocks" />
+        <menuitem action="import_minerals" />
+        <menuitem action="import_fossils" />
+        <separator />
+        <menuitem action="import_append_rocks" />
+        <menuitem action="import_append_minerals" />
+        <menuitem action="import_append_fossils" />
+      </menu>
+      <separator />
+      <menuitem action="quit" />
+    </menu>
+    <menu action="info_menu">
+      <menuitem action="show_info" />
+      <menuitem action="show_rock_info" />
+      <menuitem action="show_mineral_info" />
+      <menuitem action="show_fossil_info" />
+    </menu>
+    <menu action="options_menu">
+      <menuitem action="options" />
+    </menu>
+    <menu action="help_menu">
+      <menuitem action="about" />
+      <separator />
+      <menuitem action="help" />
+    </menu>
+  </menubar>
+</ui>
+"""
+
+
 
 class RockCollector(Gtk.Window):
     """Create the application class."""
@@ -228,9 +279,90 @@ class RockCollector(Gtk.Window):
         notebook.append_page(rock_scroll, rock_lbl)
         notebook.append_page(mineral_scroll, mineral_lbl)
         notebook.append_page(fossil_scroll, fossil_lbl)
+        
+        # Create the action group for the menus.
+        action_group = Gtk.ActionGroup("actions")
+        
+        # Create the Collection menu.
+        action_group.add_actions([
+            ("collection_menu", None, "_Collection"),
+            ("add_rock", None, "Add _Rock...", "<Control>n", None, None),
+            ("add_mineral", None, "Add _Mineral...", None, None, None),
+            ("add_fossil", None, "Add _Fossil...", None, None, None),
+            ("remove", None, "_Remove...", None, None, None),
+            ("clear_rocks", None, "Clear Rocks...", None, None, None),
+            ("clear_minerals", None, "Clear Minerals...", None, None, None),
+            ("clear_fossils", None, "Clear Fossils...", None, None, None),
+            ("clear_all", None, "Clear All...", None, None, None)
+        ])
+        
+        # Create the Collection -> Export submenu
+        action_export_group = Gtk.Action("export_menu", "E_xport", None, None)
+        action_group.add_action(action_export_group)
+        action_group.add_actions([
+            ("export_rocks", None, "Export _Rocks...", None, None, None),
+            ("export_minerals", None, "Export _Minerals...", None, None, None),
+            ("export_fossils", None, "Export _Fossils...", None, None, None)
+        ])
+        
+        # Create the Collection -> Import submenu
+        action_import_group = Gtk.Action("import_menu", "_Import", None, None)
+        action_group.add_action(action_import_group)
+        action_group.add_actions([
+            ("import_rocks", None, "Import _Rocks...", None, None, None),
+            ("import_minerals", None, "Import _Minerals...", None, None, None),
+            ("import_fossils", None, "Import _Fossils...", None, None, None),
+            ("import_append_rocks", None, "_Import and Append Rocks...", None, None, None),
+            ("import_append_minerals", None, "Import and _Append Minerals...", None, None, None),
+            ("import_append_fossils", None, "Im_port and Append Fossils...", None, None, None),
+            ("quit", None, "_Quit", "<Control>q", None, None)
+        ])
+        
+        # Create the Info menu.
+        action_group.add_actions([
+            ("info_menu", None, "_Info"),
+            ("show_info", None, "Show _Info...", None, None, None),
+            ("show_rock_info", None, "Show _Rock Info...", None, None, None),
+            ("show_mineral_info", None, "Show _Mineral Info...", None, None, None),
+            ("show_fossil_info", None, "Show _Fossil Info...", None, None, None)
+        ])
+        
+        # Create the Options menu.
+        action_group.add_actions([
+            ("options_menu", None, "_Options"),
+            ("options", None, "_Options...", "F2", None, None)
+        ])
+        
+        # Create the Help menu.
+        action_group.add_actions([
+            ("help_menu", None, "_Help"),
+            ("about", None, "_About...", "<Shift>F1", None, None),
+            ("help", None, "_Help...", "F1", None, None)
+        ])
+        
+        # Create the UI manager.
+        ui_manager = Gtk.UIManager()
+        ui_manager.add_ui_from_string(MENU_DATA)
+        
+        # Add the accelerator group to the toplevel window
+        accel_group = ui_manager.get_accel_group()
+        self.add_accel_group(accel_group)
+        ui_manager.insert_action_group(action_group)
+        
+        # Create the grid for the UI.
+        grid = Gtk.Grid()
+        
+        # Add the menubar to the window.
+        menubar = ui_manager.get_widget("/menubar")
+        grid.add(menubar)
 
         # Add the notebook to the window.
-        self.add(notebook)
+        grid.attach_next_to(notebook, menubar, Gtk.PositionType.BOTTOM, 1, 1)
+        
+        # Add the grid to the main window.
+        self.add(grid)
+        self.show_all()
+
 
 if __name__ == "__main__":
     
