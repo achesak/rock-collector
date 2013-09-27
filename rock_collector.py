@@ -1,59 +1,51 @@
-#!/usr/bin/python
-from gi.repository import Gtk
+# -*- coding: utf-8 -*-
 
 
-TITLE = "Rock Collector"
+################################################################################
 
-MENU_DATA = """
-<ui>
-  <menubar name="menubar">
-    <menu action="collection_menu">
-      <menuitem action="add_rock" />
-      <menuitem action="add_mineral" />
-      <menuitem action="add_fossil" />
-      <separator />
-      <menuitem action="remove" />
-      <separator />
-      <menuitem action="clear_rocks" />
-      <menuitem action="clear_minerals" />
-      <menuitem action="clear_fossils" />
-      <menuitem action="clear_all" />
-      <separator />
-      <menu action="export_menu">
-        <menuitem action="export_rocks" />
-        <menuitem action="export_minerals" />
-        <menuitem action="export_fossils" />
-      </menu>
-      <menu action="import_menu">
-        <menuitem action="import_rocks" />
-        <menuitem action="import_minerals" />
-        <menuitem action="import_fossils" />
-        <separator />
-        <menuitem action="import_append_rocks" />
-        <menuitem action="import_append_minerals" />
-        <menuitem action="import_append_fossils" />
-      </menu>
-      <separator />
-      <menuitem action="quit" />
-    </menu>
-    <menu action="info_menu">
-      <menuitem action="show_info" />
-      <menuitem action="show_rock_info" />
-      <menuitem action="show_mineral_info" />
-      <menuitem action="show_fossil_info" />
-    </menu>
-    <menu action="options_menu">
-      <menuitem action="options" />
-    </menu>
-    <menu action="help_menu">
-      <menuitem action="about" />
-      <separator />
-      <menuitem action="help" />
-    </menu>
-  </menubar>
-</ui>
+# Rock Collector
+# Version 0.1
+
+# Rock Collector is an application for keeping track of a geology collection.
+
+# Released under the MIT open source license:
+license_text = """
+Copyright (c) 2013 Adam Chesak
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 """
 
+################################################################################
+
+
+# Import any needed modules.
+# Import Gtk and Gdk for the interface.
+from gi.repository import Gtk, Gdk, GdkPixbuf
+# Import sys for closing the application.
+import sys
+
+# Tell Python not to create bytecode files, as they mess with the git repo.
+# This line can be removed be the user, if desired.
+sys.dont_write_bytecode = True
+
+# Import the application's UI data.
+from resources.ui import VERSION, TITLE, MENU_DATA
 
 
 class RockCollector(Gtk.Window):
@@ -315,7 +307,7 @@ class RockCollector(Gtk.Window):
             ("import_append_rocks", None, "_Import and Append Rocks...", None, None, None),
             ("import_append_minerals", None, "Import and _Append Minerals...", None, None, None),
             ("import_append_fossils", None, "Im_port and Append Fossils...", None, None, None),
-            ("quit", None, "_Quit", "<Control>q", None, None)
+            ("quit", None, "_Quit", "<Control>q", None, lambda x: self.exit("ignore", "this"))
         ])
         
         # Create the Info menu.
@@ -362,12 +354,19 @@ class RockCollector(Gtk.Window):
         # Add the grid to the main window.
         self.add(grid)
         self.show_all()
+    
+    
+    def exit(self, x, y):
+        """Closes the application."""
+        
+        # Close the application.
+        Gtk.main_quit()
 
 
 if __name__ == "__main__":
     
     # Create the application.
     win = RockCollector()
-    win.connect("delete-event", Gtk.main_quit)
+    win.connect("delete-event", win.exit)
     win.show_all()
     Gtk.main()
