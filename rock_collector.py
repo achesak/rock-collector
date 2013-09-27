@@ -278,10 +278,10 @@ class RockCollector(Gtk.Window):
         # Create the Collection menu.
         action_group.add_actions([
             ("collection_menu", None, "_Collection"),
-            ("add_rock", None, "Add _Rock...", "<Control>n", None, None),
-            ("add_mineral", None, "Add _Mineral...", None, None, None),
-            ("add_fossil", None, "Add _Fossil...", None, None, None),
-            ("remove", None, "_Remove...", None, None, None),
+            ("add_rock", None, "Add _Rock...", "<Control>r", None, None),
+            ("add_mineral", None, "Add _Mineral...", "<Control>m", None, None),
+            ("add_fossil", None, "Add _Fossil...", "<Control>f", None, None),
+            ("remove", None, "_Remove...", "<Control>d", None, None),
             ("clear_rocks", None, "Clear Rocks...", None, None, None),
             ("clear_minerals", None, "Clear Minerals...", None, None, None),
             ("clear_fossils", None, "Clear Fossils...", None, None, None),
@@ -313,10 +313,10 @@ class RockCollector(Gtk.Window):
         # Create the Info menu.
         action_group.add_actions([
             ("info_menu", None, "_Info"),
-            ("show_info", None, "Show _Info...", None, None, None),
-            ("show_rock_info", None, "Show _Rock Info...", None, None, None),
-            ("show_mineral_info", None, "Show _Mineral Info...", None, None, None),
-            ("show_fossil_info", None, "Show _Fossil Info...", None, None, None)
+            ("show_info", None, "Show _Info...", "<Control>i", None, None),
+            ("show_rock_info", None, "Show _Rock Info...", "<Control><Shift>r", None, None),
+            ("show_mineral_info", None, "Show _Mineral Info...", "<Control><Shift>m", None, None),
+            ("show_fossil_info", None, "Show _Fossil Info...", "<Control><Shift>f", None, None)
         ])
         
         # Create the Options menu.
