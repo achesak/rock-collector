@@ -6,7 +6,7 @@
 # Rock Collector
 # Version 0.1
 
-# Rock Collector is an application for keeping track of a geology collection.
+# Rock Collector is an application for managing a geology collection.
 
 # Released under the MIT open source license:
 license_text = """
@@ -328,7 +328,7 @@ class RockCollector(Gtk.Window):
         # Create the Help menu.
         action_group.add_actions([
             ("help_menu", None, "_Help"),
-            ("about", None, "_About...", "<Shift>F1", None, None),
+            ("about", None, "_About...", "<Shift>F1", None, self.show_about),
             ("help", None, "_Help...", "F1", None, None)
         ])
         
@@ -354,6 +354,51 @@ class RockCollector(Gtk.Window):
         # Add the grid to the main window.
         self.add(grid)
         self.show_all()
+    
+    
+    def show_about(self, event):
+        """Shows the About dialog."""
+        
+        # Load the icon.
+        img_file = open("resources/images/icon.png", "rb")
+        img_bin = img_file.read()
+        img_file.close()
+        
+        # Get the PixBuf.
+        loader = GdkPixbuf.PixbufLoader.new_with_type("png")
+        loader.write(img_bin)
+        loader.close()
+        pixbuf = loader.get_pixbuf()
+        
+        # Create the dialog.
+        about_dlg = Gtk.AboutDialog()
+        
+        # Set the title.
+        about_dlg.set_title("About Rock Collector")
+        # Set the program name.
+        about_dlg.set_program_name(TITLE)
+        # Set the program icon.
+        about_dlg.set_logo(pixbuf)
+        # Set the program version.
+        about_dlg.set_version(VERSION)
+        # Set the comments.
+        about_dlg.set_comments("Rock Collector is an application for managing a geology collection.")
+        # Set the copyright notice. Legal stuff, bleh.
+        about_dlg.set_copyright("Copyright (c) 2013 Adam Chesak")
+        # Set the authors.
+        about_dlg.set_authors(["Adam Chesak <achesak@yahoo.com>"])
+        # Set the license.
+        about_dlg.set_license(license_text)
+        # Set the website.
+        about_dlg.set_website("http://poultryandprogramming.wordpress.com/")
+        about_dlg.set_website_label("http://poultryandprogramming.wordpress.com/")
+        
+        # Show the dialog.
+        about_dlg.show_all()
+        
+        # Run then close the dialog.
+        about_dlg.run()
+        about_dlg.destroy()    
     
     
     def exit(self, x, y):
