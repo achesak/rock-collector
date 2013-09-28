@@ -39,6 +39,8 @@ THE SOFTWARE.
 from gi.repository import Gtk, Gdk, GdkPixbuf
 # Import sys for closing the application.
 import sys
+# Import webbrowser for opening the help in the user's web browser.
+import webbrowser
 
 # Tell Python not to create bytecode files, as they mess with the git repo.
 # This line can be removed be the user, if desired.
@@ -329,7 +331,7 @@ class RockCollector(Gtk.Window):
         action_group.add_actions([
             ("help_menu", None, "_Help"),
             ("about", None, "_About...", "<Shift>F1", None, self.show_about),
-            ("help", None, "_Help...", "F1", None, None)
+            ("help", None, "_Help...", "F1", None, self.show_help)
         ])
         
         # Create the UI manager.
@@ -398,7 +400,14 @@ class RockCollector(Gtk.Window):
         
         # Run then close the dialog.
         about_dlg.run()
-        about_dlg.destroy()    
+        about_dlg.destroy()
+    
+    
+    def show_help(self, event):
+        """Shows the help in a web browser."""
+        
+        # Open the help file.
+        webbrowser.open_new("resources/help/help.html")      
     
     
     def exit(self, x, y):
