@@ -41,6 +41,8 @@ from gi.repository import Gtk, Gdk, GdkPixbuf
 import sys
 # Import webbrowser for opening the help in the user's web browser.
 import webbrowser
+# Import os for various things.
+import os
 
 # Tell Python not to create bytecode files, as they mess with the git repo.
 # This line can be removed be the user, if desired.
@@ -48,6 +50,27 @@ sys.dont_write_bytecode = True
 
 # Import the application's UI data.
 from resources.ui import VERSION, TITLE, MENU_DATA
+
+
+# Get the main directory.
+main_dir = "%s/.rockcollector" % os.path.expanduser("~")
+
+# Check to see if the directory exists, and create it if it doesn't.
+if not os.path.exists(main_dir) or not os.path.isdir(main_dir):
+    
+    # Create the directory.
+    os.makedirs(main_dir)
+    
+    # Create the data files.
+    init_file1 = open("%s/rocks.json" % main_dir, "w")
+    init_file1.write("[]")
+    init_file1.close()
+    init_file2 = open("%s/minerals.json" % main_dir, "w")
+    init_file2.write("[]")
+    init_file2.close()
+    init_file3 = open("%s/fossils.json" % main_dir, "w")
+    init_file3.write("[]")
+    init_file3.close()
 
 
 class RockCollector(Gtk.Window):
