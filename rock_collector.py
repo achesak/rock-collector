@@ -43,6 +43,8 @@ import sys
 import webbrowser
 # Import os for various things.
 import os
+# Import platform for getting the user's OS.
+import platform
 
 # Tell Python not to create bytecode files, as they mess with the git repo.
 # This line can be removed be the user, if desired.
@@ -53,7 +55,10 @@ from resources.ui import VERSION, TITLE, MENU_DATA
 
 
 # Get the main directory.
-main_dir = "%s/.rockcollector" % os.path.expanduser("~")
+if platform.system().lower() == "windows":
+    main_dir = "C:\\.rockcollector"
+else:
+    main_dir = "%s/.rockcollector" % os.path.expanduser("~")
 
 # Check to see if the directory exists, and create it if it doesn't.
 if not os.path.exists(main_dir) or not os.path.isdir(main_dir):
