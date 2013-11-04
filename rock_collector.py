@@ -46,12 +46,14 @@ import os
 # Import platform for getting the user's OS.
 import platform
 
+# Import the application's UI data.
+from resources.ui import VERSION, TITLE, MENU_DATA
+# Import the dialog for adding a rock to the collection.
+from resources.dialogs.add_rock import AddRockDialog
+
 # Tell Python not to create bytecode files, as they mess with the git repo.
 # This line can be removed be the user, if desired.
 sys.dont_write_bytecode = True
-
-# Import the application's UI data.
-from resources.ui import VERSION, TITLE, MENU_DATA
 
 
 # Get the main directory.
@@ -76,6 +78,15 @@ if not os.path.exists(main_dir) or not os.path.isdir(main_dir):
     init_file3 = open("%s/fossils.json" % main_dir, "w")
     init_file3.write("[]")
     init_file3.close()
+    init_file4 = open("%s/rocks_counter" % main_dir, "w")
+    init_file4.write("1")
+    init_file4.close()
+    init_file5 = open("%s/minerals_counter" % main_dir, "w")
+    init_file5.write("1")
+    init_file5.close()
+    init_file6 = open("%s/fossils_counter" % main_dir, "w")
+    init_file6.write("1")
+    init_file6.close()
 
 
 class RockCollector(Gtk.Window):
@@ -308,7 +319,7 @@ class RockCollector(Gtk.Window):
         # Create the Collection menu.
         action_group.add_actions([
             ("collection_menu", None, "_Collection"),
-            ("add_rock", None, "Add _Rock...", "<Control>r", None, None),
+            ("add_rock", None, "Add _Rock...", "<Control>r", None, self.add_rock),
             ("add_mineral", None, "Add _Mineral...", "<Control>m", None, None),
             ("add_fossil", None, "Add _Fossil...", "<Control>f", None, None),
             ("remove", None, "_Remove...", "<Control>d", None, None),
@@ -384,6 +395,17 @@ class RockCollector(Gtk.Window):
         # Add the grid to the main window.
         self.add(grid)
         self.show_all()
+    
+    
+    def add_rock(self, event):
+        """Adds a rock to the collection."""
+        
+        # Show the dialog.
+        new_dlg = AddRockDialog(self)
+        # Get the response.
+        response = new_dlg.run()
+        # Close the dialog.
+        new_dlg.destroy() 
     
     
     def show_about(self, event):
