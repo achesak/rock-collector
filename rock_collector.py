@@ -37,6 +37,8 @@ THE SOFTWARE.
 # Import any needed modules.
 # Import Gtk and Gdk for the interface.
 from gi.repository import Gtk, Gdk, GdkPixbuf
+# Import json for parsing and saving the data.
+import json
 # Import sys for closing the application.
 import sys
 # Import webbrowser for opening the help in the user's web browser.
@@ -50,11 +52,12 @@ import platform
 from resources.ui import VERSION, TITLE, MENU_DATA
 # Import the dialog for adding a rock to the collection.
 from resources.dialogs.add_rock import AddRockDialog
+# Import the dialog for adding a mineral to the collection.
+from resources.dialogs.add_mineral import AddMineralDialog
 
 # Tell Python not to create bytecode files, as they mess with the git repo.
 # This line can be removed be the user, if desired.
 sys.dont_write_bytecode = True
-
 
 # Get the main directory.
 if platform.system().lower() == "windows":
@@ -87,6 +90,9 @@ if not os.path.exists(main_dir) or not os.path.isdir(main_dir):
     init_file6 = open("%s/fossils_counter" % main_dir, "w")
     init_file6.write("1")
     init_file6.close()
+    init_file7 = open("%s/window_size" % main_dir, "w")
+    init_file7.write("1000\n500")
+    init_file7.close()
 
 
 class RockCollector(Gtk.Window):
@@ -320,7 +326,7 @@ class RockCollector(Gtk.Window):
         action_group.add_actions([
             ("collection_menu", None, "_Collection"),
             ("add_rock", None, "Add _Rock...", "<Control>r", None, self.add_rock),
-            ("add_mineral", None, "Add _Mineral...", "<Control>m", None, None),
+            ("add_mineral", None, "Add _Mineral...", "<Control>m", None, self.add_mineral),
             ("add_fossil", None, "Add _Fossil...", "<Control>f", None, None),
             ("remove", None, "_Remove...", "<Control>d", None, None),
             ("clear_rocks", None, "Clear Rocks...", None, None, None),
@@ -402,6 +408,17 @@ class RockCollector(Gtk.Window):
         
         # Show the dialog.
         new_dlg = AddRockDialog(self)
+        # Get the response.
+        response = new_dlg.run()
+        # Close the dialog.
+        new_dlg.destroy()
+    
+    
+    def add_mineral(self, event):
+        """Adds a mineral to the collection."""
+        
+        # Show the dialog.
+        new_dlg = AddMineralDialog(self)
         # Get the response.
         response = new_dlg.run()
         # Close the dialog.
