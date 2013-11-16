@@ -54,6 +54,8 @@ from resources.ui import VERSION, TITLE, MENU_DATA
 from resources.dialogs.add_rock import AddRockDialog
 # Import the dialog for adding a mineral to the collection.
 from resources.dialogs.add_mineral import AddMineralDialog
+# Import the dialog for adding a fossil to the collection.
+from resources.dialogs.add_fossil import AddFossilDialog
 
 # Tell Python not to create bytecode files, as they mess with the git repo.
 # This line can be removed be the user, if desired.
@@ -327,7 +329,7 @@ class RockCollector(Gtk.Window):
             ("collection_menu", None, "_Collection"),
             ("add_rock", None, "Add _Rock...", "<Control>r", None, self.add_rock),
             ("add_mineral", None, "Add _Mineral...", "<Control>m", None, self.add_mineral),
-            ("add_fossil", None, "Add _Fossil...", "<Control>f", None, None),
+            ("add_fossil", None, "Add _Fossil...", "<Control>f", None, self.add_fossil),
             ("remove", None, "_Remove...", "<Control>d", None, None),
             ("clear_rocks", None, "Clear Rocks...", None, None, None),
             ("clear_minerals", None, "Clear Minerals...", None, None, None),
@@ -419,6 +421,17 @@ class RockCollector(Gtk.Window):
         
         # Show the dialog.
         new_dlg = AddMineralDialog(self)
+        # Get the response.
+        response = new_dlg.run()
+        # Close the dialog.
+        new_dlg.destroy()
+    
+    
+    def add_fossil(self, event):
+        """Adds a fossil  to the collection."""
+        
+        # Show the dialog.
+        new_dlg = AddFossilDialog(self)
         # Get the response.
         response = new_dlg.run()
         # Close the dialog.
