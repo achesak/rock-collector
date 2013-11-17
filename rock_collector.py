@@ -96,6 +96,44 @@ if not os.path.exists(main_dir) or not os.path.isdir(main_dir):
     init_file7.write("1000\n500")
     init_file7.close()
 
+# Load the data files.
+try:
+    
+    # Load the counters.
+    rocks_count_file = open("%s/rocks_counter" % main_dir, "r")
+    rocks_count = rocks_count_file.read().rstrip()
+    rocks_count_file.close()
+    minerals_count_file = open("%s/minerals_counter" % main_dir, "r")
+    minerals_count = minerals_count_file.read().rstrip()
+    minerals_count_file.close()
+    fossils_count_file = open("%s/fossils_counter" % main_dir, "r")
+    fossils_count = fossils_count_file.read().rstrip()
+    fossils_count_file.close()
+    
+    # Load the window size.
+    window_size_file = open("%s/window_size" % main_dir, "r")
+    window_size = window_size_file.read().rstrip().split("\n")
+    window_width = int(window_size[0])
+    window_height = int(window_size[1])
+    window_size_file.close()
+    
+    # Load the data files.
+    rocks_file = open("%s/rocks.json" % main_dir, "r")
+    rocks = json.load(rocks_file)
+    rocks_file.close()
+    minerals_file = open("%s/minerals.json" % main_dir, "r")
+    minerals = json.load(minerals_file)
+    minerals_file.close()
+    fossils_file = open("%s/fossils.json" % main_dir, "r")
+    fossils = json.load(fossils_file)
+    fossils_file.close()    
+    
+except IOError:
+    # Show the error message, and close the application.
+    # This one shows if there was a problem reading the file.
+    print("Error reading data files (IOError).")
+    sys.exit()
+
 
 class RockCollector(Gtk.Window):
     """Create the application class."""
@@ -106,7 +144,7 @@ class RockCollector(Gtk.Window):
         # Create the window.
         Gtk.Window.__init__(self, title = TITLE)
         # Set the size.
-        self.set_default_size(1000, 500)
+        self.set_default_size(window_width, window_height)
         # Set the icon.
         self.set_icon_from_file("resources/images/icon.png")
         
@@ -403,6 +441,27 @@ class RockCollector(Gtk.Window):
         # Add the grid to the main window.
         self.add(grid)
         self.show_all()
+        
+        # Bind events.
+        self.connect("delete-event", self.delete_event)
+    
+    
+    def delete_event(self, widget, event):
+        """Saves the window size."""
+        
+        # Get the current window size.
+        height, width = self.get_size()
+        
+        # Save the window size.
+        try:
+            wins_file = open("%s/window_size" % main_dir, "w")
+            wins_file.write("%d\n%d" % (height, width))
+            wins_file.close()
+        
+        except IOError:
+            # Show the error message if something happened, but continue.
+            # This one is shown if there was an error writing to the file.
+            print("Error saving window size file (IOError).")
     
     
     def add_rock(self, event):
