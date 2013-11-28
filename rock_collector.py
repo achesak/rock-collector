@@ -48,6 +48,10 @@ import os
 # Import platform for getting the user's OS.
 import platform
 
+# Tell Python not to create bytecode files, as they mess with the git repo.
+# This line can be removed be the user, if desired.
+sys.dont_write_bytecode = True
+
 # Import the application's UI data.
 from resources.ui import VERSION, TITLE, MENU_DATA
 # Import the dialog for adding a rock to the collection.
@@ -56,10 +60,6 @@ from resources.dialogs.add_rock import AddRockDialog
 from resources.dialogs.add_mineral import AddMineralDialog
 # Import the dialog for adding a fossil to the collection.
 from resources.dialogs.add_fossil import AddFossilDialog
-
-# Tell Python not to create bytecode files, as they mess with the git repo.
-# This line can be removed be the user, if desired.
-sys.dont_write_bytecode = True
 
 # Get the main directory.
 if platform.system().lower() == "windows":
